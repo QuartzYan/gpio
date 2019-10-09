@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 
-import threading
 import os
-
 import logging
-# logging.basicConfig(level=logging.ERROR)
-logging.basicConfig(level=logging.DEBUG)
-log = logging.getLogger(__name__)
+import threading
 
+# logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
 
 class PinState(object):
     """An ultra simple pin-state object.
@@ -40,13 +39,13 @@ LOW, HIGH = 'low', 'high'
 
 
 def _write(f, v):
-    log.debug("writing: {0}: {1}".format(f, v))
+    #log.debug("writing: {0}: {1}".format(f, v))
     f.write(str(v))
     f.flush()
 
 
 def _read(f):
-    log.debug("Reading: {0}".format(f))
+    #log.debug("Reading: {0}".format(f))
     f.seek(0)
     return f.read().strip()
 
@@ -120,7 +119,8 @@ def setup(pin, mode, pullup=None, initial=False):
     if mode not in (IN, OUT, LOW, HIGH):
         raise ValueError(mode)
 
-    log.debug("Setup {0}: {1}".format(pin, mode))
+    #log.debug("Setup {0}: {1}".format(pin, mode))
+    print "INFO: Setup pin:%d, mode:%s" % (int(pin), str(mode))
     f = _open[pin].direction
     _write(f, mode)
     if mode == OUT:
@@ -150,7 +150,7 @@ def read(pin):
     '''
     f = _open[pin].value
     out = int(_read(f))
-    log.debug("Read {0}: {1}".format(pin, out))
+    #log.debug("Read {0}: {1}".format(pin, out))
     return out
 
 
@@ -160,7 +160,7 @@ def set(pin, value):
     if value is LOW:
         value = 0
     value = int(bool(value))
-    log.debug("Write {0}: {1}".format(pin, value))
+    #log.debug("Write {0}: {1}".format(pin, value))
     f = _open[pin].value
     _write(f, value)
 
